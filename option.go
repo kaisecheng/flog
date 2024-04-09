@@ -43,9 +43,10 @@ Options:
                            with "byte" option, the logs will be split whenever the maximum size in bytes is reached.
   -w, --overwrite          overwrite the existing log files.
   -l, --loop               loop output forever until killed.
+  -c, --word count		   number of words to generate on json message field. (default: 10)
 `
 
-var validFormats = []string{"apache_common", "apache_combined", "apache_error", "rfc3164", "rfc5424", "common_log", "json"}
+var validFormats = []string{"apache_common", "apache_combined", "apache_error", "rfc3164", "rfc5424", "common_log", "json", "json_message"}
 var validTypes = []string{"stdout", "log", "gz"}
 
 // Option defines log generator options
@@ -60,6 +61,7 @@ type Option struct {
 	SplitBy   int
 	Overwrite bool
 	Forever   bool
+	WordCount int
 }
 
 func init() {
@@ -91,6 +93,7 @@ func defaultOptions() *Option {
 		SplitBy:   0,
 		Overwrite: false,
 		Forever:   false,
+		WordCount: 5,
 	}
 }
 
@@ -164,6 +167,13 @@ func ParseSplitBy(splitBy int) (int, error) {
 	return splitBy, nil
 }
 
+func ParseWordCount(wordCount int) (int, error) {
+	if wordCount < 0 {
+		return 0, errors.New("word-count can not be negative")
+	}
+	return wordCount, nil
+}
+
 // ParseOptions parses given parameters from command line
 func ParseOptions() *Option {
 	var err error
@@ -182,6 +192,7 @@ func ParseOptions() *Option {
 	splitBy := pflag.IntP("split", "p", opts.SplitBy, "Maximum number of lines or size of a log file")
 	overwrite := pflag.BoolP("overwrite", "w", false, "Overwrite the existing log files")
 	forever := pflag.BoolP("loop", "l", false, "Loop output forever until killed")
+	wordCount := pflag.IntP("word_count", "c", opts.WordCount, "number of words to generate on json `message` field. (default: 10)")
 
 	pflag.Parse()
 
@@ -212,6 +223,9 @@ func ParseOptions() *Option {
 		errorExit(err)
 	}
 	if opts.SplitBy, err = ParseSplitBy(*splitBy); err != nil {
+		errorExit(err)
+	}
+	if opts.WordCount, err = ParseWordCount(*wordCount); err != nil {
 		errorExit(err)
 	}
 	opts.Output = *output

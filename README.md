@@ -46,6 +46,7 @@ Options:
                            - rfc3164
                            - rfc5424
                            - json
+                           - json_message
   -o, --output string      output filename. Path-like is allowed. (default "generated.log")
   -t, --type string        log output type. available types:
                            - stdout (default)
@@ -63,6 +64,12 @@ Options:
                            with "byte" option, the logs will be split whenever the maximum size in bytes is reached.
   -w, --overwrite          overwrite the existing log files.
   -l, --loop               loop output forever until killed.
+  -c, --word count         number of words to generate on json message field. 
+                           - word count. bytes each line
+                           - 10. ~ 358
+                           - 20. ~ 426
+                           - 30. ~ 494
+                           - 108 ~ 1024
 ```
 
 ```console
@@ -94,6 +101,7 @@ $ flog -f rfc3164 -l
 - RFC5424
 - Common log fomat
 - JSON
+- JSON with flexible number of words to generate on `message` field
 
 ## Supported Outputs
 
