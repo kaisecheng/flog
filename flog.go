@@ -122,6 +122,8 @@ func NewLog(format string, t time.Time, count int) string {
 		return NewApacheCombinedLog(t)
 	case "apache_error":
 		return NewApacheErrorLog(t)
+	case "apache_message_error":
+		return NewApacheMsgErrorLog(t, count)
 	case "rfc3164":
 		return NewRFC3164Log(t)
 	case "rfc5424":
@@ -131,7 +133,7 @@ func NewLog(format string, t time.Time, count int) string {
 	case "json":
 		return NewJSONLogFormat(t)
 	case "json_message":
-		return NewJSONMessageLogFormat(t, count)
+		return NewJSONMsgLogFormat(t, count)
 	default:
 		return ""
 	}

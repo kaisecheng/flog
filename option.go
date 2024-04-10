@@ -23,6 +23,7 @@ Options:
                            - apache_common (default)
                            - apache_combined
                            - apache_error
+ 						   - apache_message_error
                            - rfc3164
                            - rfc5424
                            - json
@@ -46,7 +47,7 @@ Options:
   -c, --word count		   number of words to generate on json message field. (default: 10)
 `
 
-var validFormats = []string{"apache_common", "apache_combined", "apache_error", "rfc3164", "rfc5424", "common_log", "json", "json_message"}
+var validFormats = []string{"apache_common", "apache_combined", "apache_error", "apache_message_error", "rfc3164", "rfc5424", "common_log", "json", "json_message"}
 var validTypes = []string{"stdout", "log", "gz"}
 
 // Option defines log generator options

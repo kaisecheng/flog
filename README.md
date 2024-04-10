@@ -43,6 +43,7 @@ Options:
                            - apache_common (default)
                            - apache_combined
                            - apache_error
+                           - apache_message_error
                            - rfc3164
                            - rfc5424
                            - json

@@ -13,8 +13,13 @@ const (
 	ApacheCommonLog = "%s - %s [%s] \"%s %s %s\" %d %d"
 	// ApacheCombinedLog : {host} {user-identifier} {auth-user-id} [{datetime}] "{method} {request} {protocol}" {response-code} {bytes} "{referrer}" "{agent}"
 	ApacheCombinedLog = "%s - %s [%s] \"%s %s %s\" %d %d \"%s\" \"%s\""
+
 	// ApacheErrorLog : [{timestamp}] [{module}:{severity}] [pid {pid}:tid {thread-id}] [client %{client}:{port}] %{message}
 	ApacheErrorLog = "[%s] [%s:%s] [pid %d:tid %d] [client %s:%d] %s"
+
+	// ApacheMsgErrorLog : [{timestamp}] [{module}:{severity}] [pid {pid}:tid {thread-id}] [client %{client}:{port}] %{message}
+	ApacheMsgErrorLog = "[%s] [%s:%s] [pid %d:tid %d] [client %s:%d] %s"
+
 	// RFC3164Log : <priority>{timestamp} {hostname} {application}[{pid}]: {message}
 	RFC3164Log = "<%d>%s %s %s[%d]: %s"
 	// RFC5424Log : <priority>{version} {iso-timestamp} {hostname} {application} {pid} {message-id} {structured-data} {message}
@@ -24,8 +29,8 @@ const (
 	// JSONLogFormat : {"host": "{host}", "user-identifier": "{user-identifier}", "datetime": "{datetime}", "method": "{method}", "request": "{request}", "protocol": "{protocol}", "status", {status}, "bytes": {bytes}, "referer": "{referer}"}
 	JSONLogFormat = `{"host":"%s", "user-identifier":"%s", "datetime":"%s", "method": "%s", "request": "%s", "protocol":"%s", "status":%d, "bytes":%d, "referer": "%s"}`
 
-	// JSONLogFormat : {"host": "{host}", "user-identifier": "{user-identifier}", "datetime": "{datetime}", "method": "{method}", "request": "{request}", "protocol": "{protocol}", "status", {status}, "bytes": {bytes}, "referer": "{referer}", "message": "{message}"}
-	JSONMessageLogFormat = `{"host":"%s", "user-identifier":"%s", "datetime":"%s", "method": "%s", "request": "%s", "protocol":"%s", "status":%d, "bytes":%d, "referer": "%s", "message": "%s"}`
+	// JSONMsgLogFormat : {"host": "{host}", "user-identifier": "{user-identifier}", "datetime": "{datetime}", "method": "{method}", "request": "{request}", "protocol": "{protocol}", "status", {status}, "bytes": {bytes}, "referer": "{referer}", "message": "{message}"}
+	JSONMsgLogFormat = `{"host":"%s", "user-identifier":"%s", "datetime":"%s", "method": "%s", "request": "%s", "protocol":"%s", "status":%d, "bytes":%d, "referer": "%s", "message": "%s"}`
 )
 
 // NewApacheCommonLog creates a log string with apache common log format
@@ -72,6 +77,21 @@ func NewApacheErrorLog(t time.Time) string {
 		gofakeit.IPv4Address(),
 		gofakeit.Number(1, 65535),
 		gofakeit.HackerPhrase(),
+	)
+}
+
+// NewApacheMsgErrorLog creates a log string with apache error log format
+func NewApacheMsgErrorLog(t time.Time, count int) string {
+	return fmt.Sprintf(
+		ApacheErrorLog,
+		t.Format(ApacheError),
+		gofakeit.Word(),
+		gofakeit.LogLevel("apache"),
+		gofakeit.Number(1, 10000),
+		gofakeit.Number(1, 10000),
+		gofakeit.IPv4Address(),
+		gofakeit.Number(1, 65535),
+		gofakeit.Sentence(count),
 	)
 }
 
@@ -135,10 +155,10 @@ func NewJSONLogFormat(t time.Time) string {
 	)
 }
 
-// NewJSONMessageLogFormat creates a log string with json log format with configurable number of word on `message` field
-func NewJSONMessageLogFormat(t time.Time, count int) string {
+// NewJSONMsgLogFormat creates a log string with json log format with configurable number of word on `message` field
+func NewJSONMsgLogFormat(t time.Time, count int) string {
 	return fmt.Sprintf(
-		JSONMessageLogFormat,
+		JSONMsgLogFormat,
 		gofakeit.IPv4Address(),
 		RandAuthUserID(),
 		t.Format(CommonLog),
