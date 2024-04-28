@@ -65,13 +65,23 @@ Options:
                            with "byte" option, the logs will be split whenever the maximum size in bytes is reached.
   -w, --overwrite          overwrite the existing log files.
   -l, --loop               loop output forever until killed.
-  -c, --word count         number of words to generate on json message field. 
-                           - word count. bytes each line
+  -c, --word count         number of words to generate on message field. 
+                           - json word count. bytes each line
                            - 10. ~ 358
                            - 20. ~ 426
                            - 30. ~ 494
                            - 108 ~ 1024
                            - 75000 ~ 500kb
+                           - 150000 ~ 1mb
+                           - error log word count. bytes each line
+                           - 150 ~ 1kb
+                           - 450 ~ 3kb
+                           - 710 ~ 5kb
+                           - 1500 ~ 10kb
+                           - 7300 ~ 50kb
+                           - 15000 ~ 102kb
+                           - 33000 ~ 224kb
+                           - 75000 ~ 497kb
                            - 150000 ~ 1mb
 ```
 
